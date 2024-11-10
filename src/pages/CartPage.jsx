@@ -23,15 +23,20 @@ export default function CartPage() {
       });
       setCart(newCart);
     } else if (e.currentTarget.id === "remove-from-cart") {
-      const newCart = cart.map((item) => {
-        if (item.info.id !== itemId) return item;
-        else {
-          if (item.count >= 1) return { ...item, count: item.count - 1 };
-        }
-      });
-      setCart(newCart);
+      const itemInCart = cart.find((item) => item.info.id === itemId);
+      if (itemInCart.count > 1) {
+        const newCart = cart.map((item) => {
+          if (item.info.id !== itemId) return item;
+          else return { ...item, count: item.count - 1 };
+        });
+        setCart(newCart);
+      } else {
+        const newCart = cart.filter((item) => item.info.id !== itemId);
+        setCart(newCart);
+      }
     }
   };
+  console.log(cart);
 
   return (
     <>
@@ -75,20 +80,21 @@ export default function CartPage() {
               {cart.map((item) => (
                 <div className="flex justify-between font-semibold py-2 text-zinc-600">
                   <p>{item.info.title}</p>
-                  <p>$ {item.info.price}</p>
+                  <p>
+                    {item.count > 1 ? `${item.count} x ` : null}${item.info.price}
+                  </p>
                 </div>
               ))}
             </div>
             <div className="flex justify-between font-semibold py-2 text-lg">
               <p>Total</p>
-              <p>$ {Number(cart.reduce((totalCost, item) => totalCost + item.info.price, 0).toFixed(2))}</p>
+              <p>$ {Number(cart.reduce((totalCost, item) => totalCost + item.info.price * item.count, 0).toFixed(2))}</p>
             </div>
             <br />
             <button className="bg-zinc-800 text-white py-2 px-4 self-end">Checkout</button>
           </div>
         </div>
       )}
-      {/* <div></div> */}
     </>
   );
 }
