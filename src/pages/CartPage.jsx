@@ -78,7 +78,7 @@ export default function CartPage() {
           <div className="flex flex-col">
             <div className="border-b pb-2">
               {cart.map((item) => (
-                <div className="flex justify-between font-semibold py-2 text-zinc-600">
+                <div className="flex gap-8 text-sm sm:text-base justify-between font-semibold py-2 text-zinc-600">
                   <p>{item.info.title}</p>
                   <p>
                     {item.count > 1 ? `${item.count} x ` : null}${item.info.price}
@@ -91,7 +91,7 @@ export default function CartPage() {
               <p>$ {Number(cart.reduce((totalCost, item) => totalCost + item.info.price * item.count, 0).toFixed(2))}</p>
             </div>
             <br />
-            <button className="bg-zinc-800 text-white py-2 px-4 self-end">Checkout</button>
+            <button className="bg-zinc-800 text-white py-2 px-4 self-end w-full sm:w-auto">Checkout</button>
           </div>
         </div>
       )}
