@@ -1,20 +1,31 @@
-import { useLoaderData, useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useLoaderData, useNavigate, useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
 import { cartContext } from "../context/CartContext";
 import Minus from "../components/Minus";
 import Plus from "../components/Plus";
 import ArrowLeft from "../components/ArrowLeft";
 
-export function loader({ params }) {
-  return fetch(`https://fakestoreapi.com/products/${params.productId}`)
-    .then((response) => response.json())
-    .then((product) => ({ product }));
-}
+// export function loader({ params }) {
+//   return fetch(`https://fakestoreapi.com/products/${params.productId}`)
+//     .then((response) => response.json())
+//     .then((product) => ({ product }));
+// }
 
 export default function ProductPage() {
+  const { productId } = useParams();
   const navigate = useNavigate();
-  const { product } = useLoaderData();
+  const [product, setProduct] = useState({});
+  const [loading, setLoading] = useState(true);
   const { cart, setCart } = useContext(cartContext);
+
+  useEffect(() => {
+    fetch(`https://fakestoreapi.com/products/${productId}`)
+      .then((response) => response.json())
+      .then((response) => {
+        setProduct(response);
+        setLoading(false);
+      });
+  }, []);
 
   const navigatePrevious = () => {
     navigate(-1);
@@ -54,43 +65,45 @@ export default function ProductPage() {
     }
   };
 
-  return (
-    <>
-      <button id="back" onClick={navigatePrevious}>
-        <ArrowLeft />
-      </button>
-      <div className="grid gap-4 grid-col-1 md:grid-cols-[1fr_2fr] h-full place-items-center">
-        <div className="p-8">
-          <img src={product.image} alt="product" className="lg:h-full sm:h-48" />
-        </div>
-        <div className="md:px-16 md:py-8 sm:p-8">
-          <h1 className="text-2xl uppercase">{product.title}</h1>
-          <p className="font-semibold text-gray-600">
-            <span className="">Category:</span> <span className="capitalize">{product.category}</span>
-          </p>
-          <br />
-          <p className="text-xl">$ {product.price}</p>
-          <br />
-          <p>{product.description}</p>
-          <br />
-          <div className="flex gap-4 flex-col sm:flex-row justify-between">
-            <div className="flex sm:w-1/3 w-full">
-              <button id="remove-from-cart" className="basis-1/4 border flex justify-center py-2" onClick={handleClick}>
-                <Minus />
-              </button>
-              <div className="basis-2/4  flex justify-center py-2">{cart.find((item) => item.info.id === product.id)?.count || 0}</div>
-              <button id="add-to-cart" className="basis-1/4 border flex justify-center py-2 bg-zinc-800" onClick={handleClick}>
-                <Plus />
-              </button>
+  if (loading) return <div className="text-center text-2xl">Loading...</div>;
+  else
+    return (
+      <>
+        <button id="back" onClick={navigatePrevious}>
+          <ArrowLeft />
+        </button>
+        <div className="grid gap-4 grid-col-1 md:grid-cols-[1fr_2fr] h-full place-items-center">
+          <div className="p-8">
+            <img src={product.image} alt="product" className="lg:h-full sm:h-48" />
+          </div>
+          <div className="md:px-16 md:py-8 sm:p-8">
+            <h1 className="text-2xl uppercase">{product.title}</h1>
+            <p className="font-semibold text-gray-600">
+              <span className="">Category:</span> <span className="capitalize">{product.category}</span>
+            </p>
+            <br />
+            <p className="text-xl">$ {product.price}</p>
+            <br />
+            <p>{product.description}</p>
+            <br />
+            <div className="flex gap-4 flex-col sm:flex-row justify-between">
+              <div className="flex sm:w-1/3 w-full">
+                <button id="remove-from-cart" className="basis-1/4 border flex justify-center py-2" onClick={handleClick}>
+                  <Minus />
+                </button>
+                <div className="basis-2/4  flex justify-center py-2">{cart.find((item) => item.info.id === product.id)?.count || 0}</div>
+                <button id="add-to-cart" className="basis-1/4 border flex justify-center py-2 bg-zinc-800" onClick={handleClick}>
+                  <Plus />
+                </button>
+              </div>
+              {cart.find((item) => item.info.id === product.id) && (
+                <button className="py-2 px-4 bg-zinc-800 text-white" onClick={navigateToCart}>
+                  Buy now
+                </button>
+              )}
             </div>
-            {cart.find((item) => item.info.id === product.id) && (
-              <button className="py-2 px-4 bg-zinc-800 text-white" onClick={navigateToCart}>
-                Buy now
-              </button>
-            )}
           </div>
         </div>
-      </div>
-    </>
-  );
+      </>
+    );
 }

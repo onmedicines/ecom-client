@@ -17,7 +17,7 @@ export default function App() {
         <div id="app" className="w-full max-w-screen-xl h-full flex flex-col pb-8 px-8">
           <header className="flex justify-between py-6 items-center sticky top-0 bg-gradient-to-b from-white via-white to-white/80 ">
             <h1 className="text-xl">
-              <NavLink to={"/"}>RARE</NavLink>
+              <NavLink to={"/"}>NILE</NavLink>
             </h1>
             <>
               {/* menu */}
