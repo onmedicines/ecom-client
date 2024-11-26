@@ -22,7 +22,7 @@ export default function App() {
             <>
               {/* menu */}
               <nav className="hidden sm:block">
-                <Navlinks menuActive={false} />
+                <Navlinks />
               </nav>
               <div className="block sm:hidden">{menuVisible ? <Cross handleClick={toggleMenu} /> : <HamburgerIcon handleClick={toggleMenu} />}</div>
             </>

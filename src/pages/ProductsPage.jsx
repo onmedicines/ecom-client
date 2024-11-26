@@ -1,13 +1,5 @@
-import { NavLink, useLoaderData } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
-
-// export function loader() {
-//   // getProducts().then((products) => ({ products }));
-//   return fetch("https://fakestoreapi.com/products?limit=20")
-//     .then((response) => response.json())
-//     .then((products) => ({ products }))
-//     .catch((err) => err);
-// }
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);

@@ -14,8 +14,6 @@ export default function CartPage() {
   };
 
   const handleClick = (e, itemId) => {
-    console.log(e.currentTarget.id);
-
     if (e.currentTarget.id === "add-to-cart") {
       const newCart = cart.map((item) => {
         if (item.info.id !== itemId) return item;
@@ -36,7 +34,6 @@ export default function CartPage() {
       }
     }
   };
-  console.log(cart);
 
   return (
     <>
